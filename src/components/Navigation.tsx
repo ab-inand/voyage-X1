@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Auth from './features/Auth';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -18,9 +19,15 @@ const navItems = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const authRef = useRef<{ open: () => void }>(null);
+
+  const handleLogin = () => {
+    authRef.current?.open();
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
+      <Auth ref={authRef} />
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center justify-between px-8 py-4">
         <Link href="/" className="text-2xl font-bold gradient-text">
@@ -41,25 +48,12 @@ export default function Navigation() {
             </Link>
           ))}
           <motion.button
-            className="ml-4 p-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsOpen(true)}
+            className="ml-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogin}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
+            Login
           </motion.button>
         </div>
       </div>
@@ -69,34 +63,44 @@ export default function Navigation() {
         <Link href="/" className="text-2xl font-bold gradient-text">
           VoyageX
         </Link>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-gray-300 hover:text-white"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div className="flex items-center gap-4">
+          <motion.button
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogin}
           >
-            {isOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
+            Login
+          </motion.button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-gray-300 hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -123,6 +127,15 @@ export default function Navigation() {
                   {item.name}
                 </Link>
               ))}
+              <button
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLogin();
+                }}
+              >
+                Login
+              </button>
             </div>
           </motion.div>
         )}

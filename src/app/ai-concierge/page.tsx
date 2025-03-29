@@ -1,9 +1,21 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import AIChatbot from '@/components/features/AIChatbot';
+import TripPreferencesModal from '@/components/features/TripPreferencesModal';
+import AIPersonalitySelector from '@/components/features/AIPersonalitySelector';
+import QuestionFlow from '@/components/features/QuestionFlow';
+
+interface AIPersonality {
+  id: string;
+  name: string;
+  role: string;
+  description: string;
+  avatar: string;
+  color: string;
+}
 
 const travelPreferences = [
   { id: 'adventure', label: 'Adventure', icon: '🏃‍♂️' },
@@ -35,17 +47,24 @@ const nftPerks = [
 ];
 
 export default function AIConciergePage() {
-  const [selectedPreference, setSelectedPreference] = useState('');
-  const [selectedBudget, setSelectedBudget] = useState('');
-  const [showNFTModal, setShowNFTModal] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState('pending');
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showPreferences, setShowPreferences] = useState(false);
+  const [selectedPersonality, setSelectedPersonality] = useState<AIPersonality | null>(null);
+  const [questionAnswers, setQuestionAnswers] = useState<Record<string, any>>({});
 
-  const handleVerification = () => {
-    setVerificationStatus('verifying');
-    // Simulate biometric verification
-    setTimeout(() => {
-      setVerificationStatus('verified');
-    }, 2000);
+  const handlePreferencesComplete = (preferences: any) => {
+    setShowPreferences(false);
+    setCurrentStep(2);
+  };
+
+  const handlePersonalitySelect = (personality: AIPersonality) => {
+    setSelectedPersonality(personality);
+    setCurrentStep(3);
+  };
+
+  const handleQuestionFlowComplete = (answers: Record<string, any>) => {
+    setQuestionAnswers(answers);
+    setCurrentStep(4);
   };
 
   return (
@@ -79,134 +98,110 @@ export default function AIConciergePage() {
       {/* Main Content */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
-          {/* Travel Preferences */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="glass rounded-2xl p-8 mb-8"
-          >
-            <h2 className="text-2xl font-bold mb-6 gradient-text">What type of experience are you looking for?</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {travelPreferences.map((pref) => (
-                <motion.button
-                  key={pref.id}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedPreference(pref.id)}
-                  className={`p-4 rounded-xl text-center transition-all duration-300 ${
-                    selectedPreference === pref.id
-                      ? 'bg-blue-500/20 border-2 border-blue-500'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="text-4xl mb-2">{pref.icon}</div>
-                  <div className="text-white font-semibold">{pref.label}</div>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Budget Selection */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="glass rounded-2xl p-8 mb-8"
-          >
-            <h2 className="text-2xl font-bold mb-6 gradient-text">What's your budget range?</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {budgetRanges.map((range) => (
-                <motion.button
-                  key={range.label}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedBudget(range.label)}
-                  className={`p-4 rounded-xl text-center transition-all duration-300 ${
-                    selectedBudget === range.label
-                      ? 'bg-blue-500/20 border-2 border-blue-500'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="text-white font-semibold">{range.label}</div>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* NFT Perks */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="glass rounded-2xl p-8 mb-8"
-          >
-            <h2 className="text-2xl font-bold mb-6 gradient-text">Exclusive NFT Perks</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {nftPerks.map((nft) => (
-                <motion.div
-                  key={nft.name}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white/5 rounded-xl p-4"
-                >
-                  <img
-                    src={nft.image}
-                    alt={nft.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <h3 className="text-xl font-bold mb-2">{nft.name}</h3>
-                  <p className="text-gray-400 mb-4">{nft.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-blue-400 font-semibold">{nft.price}</span>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white text-sm font-semibold"
-                    >
-                      Add to Cart
-                    </motion.button>
+          {/* Step Indicator */}
+          <div className="flex justify-center mb-12">
+            <div className="flex items-center space-x-4">
+              {[1, 2, 3, 4].map((step) => (
+                <div key={step} className="flex items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      currentStep >= step
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600'
+                        : 'bg-white/10'
+                    }`}
+                  >
+                    {step}
                   </div>
-                </motion.div>
+                  {step < 4 && (
+                    <div
+                      className={`w-16 h-0.5 mx-2 ${
+                        currentStep > step ? 'bg-gradient-to-r from-blue-500 to-purple-600' : 'bg-white/10'
+                      }`}
+                    />
+                  )}
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Biometric Verification */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="glass rounded-2xl p-8"
-          >
-            <h2 className="text-2xl font-bold mb-6 gradient-text">Confirm Your Booking</h2>
-            <div className="text-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleVerification}
-                disabled={verificationStatus === 'verifying'}
-                className={`px-8 py-4 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
-                  verificationStatus === 'verified'
-                    ? 'bg-green-500'
-                    : verificationStatus === 'verifying'
-                    ? 'bg-blue-500/50'
-                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-xl'
-                }`}
+          {/* Content Area */}
+          <AnimatePresence mode="wait">
+            {currentStep === 1 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-center"
               >
-                {verificationStatus === 'verified'
-                  ? '✓ Verified'
-                  : verificationStatus === 'verifying'
-                  ? 'Verifying...'
-                  : 'Verify with Biometrics'}
-              </motion.button>
-            </div>
-          </motion.div>
+                <h2 className="text-3xl font-bold mb-6 gradient-text">Let's Start Planning Your Trip</h2>
+                <p className="text-gray-400 mb-8">First, let's get to know your travel preferences</p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowPreferences(true)}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Set Your Preferences
+                </motion.button>
+              </motion.div>
+            )}
+
+            {currentStep === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <AIPersonalitySelector onSelect={handlePersonalitySelect} />
+              </motion.div>
+            )}
+
+            {currentStep === 3 && (
+              <motion.div
+                key="step3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <QuestionFlow onComplete={handleQuestionFlowComplete} />
+              </motion.div>
+            )}
+
+            {currentStep === 4 && (
+              <motion.div
+                key="step4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-center"
+              >
+                <h2 className="text-3xl font-bold mb-6 gradient-text">Perfect! Let's Review Your Choices</h2>
+                <div className="glass rounded-2xl p-8 space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Selected AI Guide</h3>
+                    <p className="text-gray-400">{selectedPersonality?.name}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Your Preferences</h3>
+                    <pre className="text-gray-400 text-left">
+                      {JSON.stringify(questionAnswers, null, 2)}
+                    </pre>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
+
+      {/* Trip Preferences Modal */}
+      <TripPreferencesModal
+        isOpen={showPreferences}
+        onClose={() => setShowPreferences(false)}
+        onComplete={handlePreferencesComplete}
+      />
     </div>
   );
 } 

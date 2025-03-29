@@ -1,73 +1,111 @@
-# VoyageX - AI-Powered Travel Planning Platform
+# VoyageX - Next-Gen Travel Platform
 
-A futuristic travel planning platform that combines AI technology with immersive 3D experiences to help users plan their perfect getaway.
+A futuristic travel platform that combines immersive 3D experiences, AI personalization, and interactive storytelling to revolutionize the way people plan and experience travel.
 
 ## Features
 
-- 🤖 AI Travel Designer with voice interaction
-- 🌍 Interactive 3D Globe visualization
-- 🎯 Personalized travel recommendations
-- 💬 AI Concierge for real-time assistance
-- 🎨 Modern, holographic UI design
-- 📱 Responsive design for all devices
+- 🌍 Interactive 3D Globe Explorer
+- 🤖 AI-Powered Travel Concierge
+- 🎮 Virtual Reality Previews
+- 📱 Responsive Design
+- 🎨 Modern UI with Glassmorphism
+- ⚡ Smooth Animations
+- 🔒 Secure Authentication
+- 💎 NFT Integration
 
 ## Tech Stack
 
 - Next.js 14
 - TypeScript
-- Tailwind CSS
+- React Three Fiber / Drei
 - Framer Motion
-- Three.js
-- React Three Fiber
-- Speech Recognition API
+- Tailwind CSS
+- Headless UI
+- Prisma ORM
+- JWT Authentication
+- Nodemailer
+
+## Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- PostgreSQL (for database)
 
 ## Getting Started
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/ab-inand/voyagex.git
-   ```
+```bash
+git clone https://github.com/yourusername/voyax.git
+cd voyax
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+Fill in the required environment variables in the `.env` file:
+- `DATABASE_URL`: Your PostgreSQL database URL
+- `JWT_SECRET`: Secret key for JWT authentication
+- `SMTP_HOST`: SMTP server host
+- `SMTP_PORT`: SMTP server port
+- `SMTP_USER`: SMTP username
+- `SMTP_PASS`: SMTP password
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Set up the database:
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+5. Run the development server:
+```bash
+npm run dev
+```
+
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Project Structure
 
 ```
-voyagex/
-├── src/
-│   ├── app/                 # Next.js app router pages
-│   ├── components/          # React components
-│   │   ├── 3d/            # 3D visualization components
-│   │   ├── ai/            # AI-related components
-│   │   ├── features/      # Feature-specific components
-│   │   └── ui/            # UI components
-│   └── styles/            # Global styles
-├── public/                # Static assets
-└── package.json          # Project dependencies
+src/
+├── app/                 # Next.js app directory
+│   ├── api/            # API routes
+│   └── (routes)/       # Page routes
+├── components/         # Reusable components
+├── lib/               # Utility functions and configurations
+├── prisma/            # Database schema and migrations
+├── styles/            # Global styles
+└── types/             # TypeScript type definitions
 ```
 
-## Key Components
+## Available Scripts
 
-- `LexiAvatar`: AI assistant avatar with different modes
-- `QuestionFlow`: Interactive questionnaire for travel preferences
-- `HolographicOverlay`: Futuristic UI overlay effect
-- `InteractiveGlobe`: 3D globe visualization
-- `AIChatbot`: Real-time chat assistance
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Three.js for 3D graphics
+- Framer Motion for animations
+- Tailwind CSS for styling
+- Next.js team for the amazing framework
+- Prisma team for the database ORM

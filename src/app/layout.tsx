@@ -1,24 +1,22 @@
-'use client';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-import 'regenerator-runtime/runtime';
-import { Inter } from 'next/font/google';
-import './globals.css';
+const inter = Inter({ subsets: ["latin"] });
 
-const inter = Inter({ subsets: ['latin'] });
+export const metadata: Metadata = {
+  title: "VoyageX - Explore Beyond Reality",
+  description: "Next-generation travel platform with immersive 3D experiences and AI-powered recommendations",
+};
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <head>
-        <title>VoyageX - AI-Powered Travel Planning</title>
-        <meta name="description" content="Plan your perfect trip with VoyageX's AI-powered travel assistant" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-black text-white`}>{children}</body>
     </html>
   );
 }

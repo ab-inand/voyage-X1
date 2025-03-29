@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  password              String
+  name                  String?
+  emailVerified         Boolean   @default(false)
+  verificationToken     String?   @unique
+  verificationTokenExpiry DateTime?
+  resetToken           String?   @unique
+  resetTokenExpiry     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  trips         Trip[]
+  preferences   UserPreferences?
+  isVerified    Boolean   @default(false)
+  rememberMeToken String?
+  provider      String?   // 'google', 'github', etc.
+  providerId    String?   // ID from the provider
+  image         String?   // Profile image URL
+  emailVerificationToken String?
+  emailVerificationExpiry DateTime?
+
+  @@unique([provider, providerId]) // Ensure unique provider IDs
+}
+
+model UserPreferences {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  preferredDestinations String[]
+  travelStyle   String?
+  budget        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Trip {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  destination   String
+  startDate     DateTime
+  endDate       DateTime
+  status        String    @default("PLANNED") // PLANNED, BOOKED, COMPLETED, CANCELLED
+  budget        Float?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
