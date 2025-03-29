@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { loginUser } from '@/lib/auth';
+import { login } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await loginUser(email, password, rememberMe);
+    const result = await login(email, password, rememberMe);
 
     if (!result.success) {
       return NextResponse.json(

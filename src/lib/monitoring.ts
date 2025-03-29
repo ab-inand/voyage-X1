@@ -6,7 +6,7 @@
 
 import { WATERMARK } from './watermark';
 
-export interface UsageData {
+interface UsageData {
   timestamp: number;
   domain: string;
   ip?: string;
@@ -15,13 +15,7 @@ export interface UsageData {
   action: 'view' | 'copy' | 'modify';
 }
 
-export interface SecurityResponse {
-  events: UsageData[];
-  activeUsers: number;
-  lastActivity: number | null;
-}
-
-export class MonitoringService {
+class MonitoringService {
   private static instance: MonitoringService;
   private usageLogs: UsageData[] = [];
   private readonly API_ENDPOINT = 'https://oyage-x1-monitoring.onrender.com/monitoring'; // Updated endpoint
@@ -117,27 +111,6 @@ export class MonitoringService {
 
   public getUsageLogs(): UsageData[] {
     return this.usageLogs;
-  }
-
-  public async getSecurityEvents(): Promise<UsageData[]> {
-    // Filter for security-relevant events (modify actions)
-    return this.usageLogs.filter(log => log.action === 'modify');
-  }
-
-  public async getActiveUsers(): Promise<number> {
-    // Get unique IPs from the last 24 hours
-    const last24Hours = Date.now() - (24 * 60 * 60 * 1000);
-    const recentLogs = this.usageLogs.filter(log => log.timestamp > last24Hours);
-    const uniqueIPs = new Set(recentLogs.map(log => log.ip));
-    return uniqueIPs.size;
-  }
-
-  public async getLastActivity(): Promise<number | null> {
-    if (this.usageLogs.length === 0) {
-      return null;
-    }
-    // Get the most recent timestamp
-    return Math.max(...this.usageLogs.map(log => log.timestamp));
   }
 }
 

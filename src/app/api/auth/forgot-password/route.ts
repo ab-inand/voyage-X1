@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requestPasswordReset } from '@/lib/auth';
+import { initiatePasswordReset } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await requestPasswordReset(email);
+    const result = await initiatePasswordReset(email);
 
     if (!result.success) {
       return NextResponse.json(
