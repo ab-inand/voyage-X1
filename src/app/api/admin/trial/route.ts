@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { sign } from 'jsonwebtoken';
 
-// In a real application, these would be stored in a database
-const TRIAL_CODES = {
+interface TrialCode {
+  used: boolean;
+  expires: string;
+}
+
+type TrialCodeKey = 'VOYAGEX-2024-001' | 'VOYAGEX-2024-002' | 'VOYAGEX-2024-003' | 'VOYAGEX-2024-004' | 'VOYAGEX-2024-005';
+
+const TRIAL_CODES: Record<TrialCodeKey, TrialCode> = {
   'VOYAGEX-2024-001': { used: false, expires: '2025-12-31' },
   'VOYAGEX-2024-002': { used: false, expires: '2025-12-31' },
   'VOYAGEX-2024-003': { used: false, expires: '2025-12-31' },
@@ -15,7 +21,7 @@ export async function POST(request: Request) {
     const { code } = await request.json();
 
     // Validate trial code
-    const trialCode = TRIAL_CODES[code];
+    const trialCode = TRIAL_CODES[code as TrialCodeKey];
     if (!trialCode) {
       return NextResponse.json(
         { error: 'Invalid trial code' },
@@ -39,7 +45,7 @@ export async function POST(request: Request) {
     }
 
     // Mark code as used
-    TRIAL_CODES[code].used = true;
+    TRIAL_CODES[code as TrialCodeKey].used = true;
 
     // Generate trial token
     const token = sign(
