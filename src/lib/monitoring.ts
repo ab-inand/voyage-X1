@@ -18,7 +18,7 @@ interface UsageData {
 class MonitoringService {
   private static instance: MonitoringService;
   private usageLogs: UsageData[] = [];
-  private readonly API_ENDPOINT = 'https://api.voyage-x1.com/monitoring'; // Replace with your actual endpoint
+  private readonly API_ENDPOINT = 'https://oyage-x1-monitoring.onrender.com/monitoring'; // Updated endpoint
 
   private constructor() {
     this.setupMonitoring();
