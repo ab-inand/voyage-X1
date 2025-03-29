@@ -112,6 +112,19 @@ class MonitoringService {
   public getUsageLogs(): UsageData[] {
     return this.usageLogs;
   }
+
+  public async getSecurityEvents(): Promise<UsageData[]> {
+    // Filter for security-relevant events (modify actions)
+    return this.usageLogs.filter(log => log.action === 'modify');
+  }
+
+  public async getActiveUsers(): Promise<number> {
+    // Get unique IPs from the last 24 hours
+    const last24Hours = Date.now() - (24 * 60 * 60 * 1000);
+    const recentLogs = this.usageLogs.filter(log => log.timestamp > last24Hours);
+    const uniqueIPs = new Set(recentLogs.map(log => log.ip));
+    return uniqueIPs.size;
+  }
 }
 
 export const monitoringService = MonitoringService.getInstance(); 
