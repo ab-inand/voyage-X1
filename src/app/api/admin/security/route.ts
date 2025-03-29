@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
-import { monitoringService } from '@/lib/monitoring';
+import { monitoringService, SecurityResponse } from '@/lib/monitoring';
 
 export async function GET(request: Request) {
   try {
@@ -25,11 +25,13 @@ export async function GET(request: Request) {
     // Get last activity timestamp
     const lastActivity = await monitoringService.getLastActivity();
 
-    return NextResponse.json({
+    const response: SecurityResponse = {
       events,
       activeUsers,
       lastActivity
-    });
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error('Security data error:', error);
     return NextResponse.json(
