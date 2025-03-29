@@ -20,7 +20,7 @@ interface AuthProps {
 }
 
 const Auth = forwardRef<AuthRef, AuthProps>(({ defaultMode = 'login' }, ref) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(defaultMode === 'login');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);

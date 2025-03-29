@@ -11,6 +11,12 @@ import InteractiveGlobe from '@/components/3d/InteractiveGlobe';
 import AIChatbot from '@/components/features/AIChatbot';
 import Link from 'next/link';
 import ScrollIndicator from '@/components/ui/ScrollIndicator';
+import FutureOfTravel from '@/components/features/FutureOfTravel';
+import SpaceTourism from '@/components/features/SpaceTourism';
+import HyperloopMap from '@/components/features/HyperloopMap';
+import UnderwaterHotel from '@/components/features/UnderwaterHotel';
+import FutureTravelerQuiz from '@/components/features/FutureTravelerQuiz';
+import Web3Newsletter from '@/components/features/Web3Newsletter';
 
 const features = [
   {
@@ -163,19 +169,19 @@ const testimonials = [
   {
     name: 'Sarah Johnson',
     role: 'Adventure Enthusiast',
-    image: '/testimonials/sarah.jpg',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop',
     text: 'VoyageX made my dream vacation come true. The booking process was seamless, and the support was exceptional.'
   },
   {
     name: 'Michael Chen',
     role: 'Frequent Traveler',
-    image: '/testimonials/michael.jpg',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop',
     text: 'The rewards program is fantastic! I\'ve earned enough points for multiple upgrades and exclusive experiences.'
   },
   {
     name: 'Emma Davis',
     role: 'Travel Blogger',
-    image: '/testimonials/emma.jpg',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
     text: 'Their curated destinations and experiences are top-notch. I\'ve discovered hidden gems I never knew existed.'
   }
 ];
@@ -519,7 +525,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-20 bg-black">
         <div className="container mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -559,6 +565,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Future of Travel Section */}
+      <FutureOfTravel />
+      <SpaceTourism />
+      <HyperloopMap />
+      <UnderwaterHotel />
+      <FutureTravelerQuiz />
+      <Web3Newsletter />
 
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
