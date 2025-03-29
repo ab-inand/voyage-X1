@@ -1,3 +1,9 @@
+/**
+ * @file page.tsx
+ * @copyright 2024 Abhinand. All rights reserved.
+ * @license MIT
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';

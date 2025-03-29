@@ -1,6 +1,10 @@
 # VoyageX - Next-Gen Travel Platform
 
+Copyright © 2024 Abhinand. All rights reserved.
+
 A modern, AI-powered travel platform built with Next.js, React Three Fiber, and Tailwind CSS.
+
+> ⚠️ **Important Notice**: This software is protected by copyright law. Viewing is permitted for personal reference only. Any copying, modification, or distribution is strictly prohibited without explicit written permission.
 
 ## Features
 
@@ -22,28 +26,27 @@ A modern, AI-powered travel platform built with Next.js, React Three Fiber, and 
 - TypeScript
 - Three.js
 
-## Getting Started
+## Viewing Instructions
+
+This repository is for viewing purposes only. To view the code:
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/ab-inand/voyage-X1.git
 ```
 
-2. Install dependencies:
+2. View the code locally:
 ```bash
-npm install
-# or
-yarn install
+cd voyage-X1
 ```
 
-3. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Restrictions
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Copying, reproduction, or distribution of any part of this software is strictly prohibited
+- Modification, adaptation, or creation of derivative works is not allowed
+- Reverse engineering, decompilation, or disassembly is prohibited
+- Public display or performance of the software is not permitted
+- Any form of redistribution or resale is strictly forbidden
 
 ## Project Structure
 
@@ -60,13 +63,13 @@ voyage-X1/
 └── package.json
 ```
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is protected by copyright law. All rights are reserved. See the LICENSE file for detailed terms and conditions.
+
+## Contact
+
+For licensing inquiries or permissions, please contact the copyright holder.
 
 ## Acknowledgments
 
@@ -74,4 +77,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Framer Motion for animations
 - Tailwind CSS for styling
 - Next.js team for the amazing framework
-- Prisma team for the database ORM
