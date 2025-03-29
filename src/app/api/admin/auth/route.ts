@@ -5,19 +5,34 @@
  */
 
 import { NextResponse } from 'next/server';
+import { verify } from 'jsonwebtoken';
 
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('Authorization');
+  try {
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
 
-  if (!authHeader || authHeader !== `Bearer ${process.env.MONITORING_API_KEY}`) {
+    const token = authHeader.split(' ')[1];
+    
+    try {
+      const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key');
+      return NextResponse.json(decoded);
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid token' },
+        { status: 401 }
+      );
+    }
+  } catch (error) {
+    console.error('Auth verification error:', error);
     return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
+      { error: 'Internal server error' },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json(
-    { status: 'authenticated' },
-    { status: 200 }
-  );
 } 

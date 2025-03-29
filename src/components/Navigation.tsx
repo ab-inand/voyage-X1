@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,8 +18,26 @@ const navItems = [
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const authRef = useRef<{ open: () => void }>(null);
+
+  useEffect(() => {
+    // Check if user is admin
+    const checkAdminStatus = async () => {
+      try {
+        const response = await fetch('/api/admin/auth', {
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MONITORING_KEY}`
+          }
+        });
+        setIsAdmin(response.ok);
+      } catch (error) {
+        setIsAdmin(false);
+      }
+    };
+    checkAdminStatus();
+  }, []);
 
   const handleLogin = () => {
     authRef.current?.open();
@@ -47,6 +65,18 @@ export default function Navigation() {
               {item.name}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin/monitoring"
+              className={`text-sm font-medium transition-colors ${
+                pathname === '/admin/monitoring'
+                  ? 'text-blue-400'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              Admin Dashboard
+            </Link>
+          )}
           <motion.button
             className="ml-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             whileHover={{ scale: 1.05 }}
@@ -127,6 +157,19 @@ export default function Navigation() {
                   {item.name}
                 </Link>
               ))}
+              {isAdmin && (
+                <Link
+                  href="/admin/monitoring"
+                  className={`block text-sm font-medium transition-colors ${
+                    pathname === '/admin/monitoring'
+                      ? 'text-blue-400'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admin Dashboard
+                </Link>
+              )}
               <button
                 className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => {
