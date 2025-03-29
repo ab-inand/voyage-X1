@@ -29,6 +29,7 @@
     "nodemailer": "^6.10.0",
     "react": "^18",
     "react-dom": "^18",
+    "recharts": "^2.15.1",
     "three": "^0.161.0"
   },
   "devDependencies": {

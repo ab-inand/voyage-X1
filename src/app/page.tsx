@@ -1,11 +1,12 @@
 /**
  * @file page.tsx
  * @copyright 2024 Abhinand. All rights reserved.
- * @license MIT
+ * @license Proprietary
  */
 
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
@@ -23,6 +24,8 @@ import HyperloopMap from '@/components/features/HyperloopMap';
 import UnderwaterHotel from '@/components/features/UnderwaterHotel';
 import FutureTravelerQuiz from '@/components/features/FutureTravelerQuiz';
 import Web3Newsletter from '@/components/features/Web3Newsletter';
+import { monitoringService } from '@/lib/monitoring';
+import { embedWatermark } from '@/lib/watermark';
 
 const features = [
   {
@@ -194,6 +197,11 @@ const testimonials = [
 
 export default function HomePage() {
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    // Initialize monitoring
+    monitoringService;
+  }, []);
 
   return (
     <div className="min-h-screen bg-black">
